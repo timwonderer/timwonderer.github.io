@@ -21,6 +21,12 @@ An algorithm is a set of instructions or a step-by-step procedure designed to pe
 <ul>
 <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled=""> Describe each core algorithm used.</li>
 <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled=""> Explain the logic and reasoning behind these algorithms.</li>
+</ul>
+<blockquote>
+<p>[!IMPORTANT]<br>
+Your program should include a well-thought-out algorithm that demonstrates sequencing, selection, and iteration. Make sure to explain how this algorithm is integral to your program’s functionality and how it’s implemented within a procedure. This is key to showcasing your programming skills and understanding of algorithm development.</p>
+</blockquote>
+<ul>
 <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled=""> Discuss the choice of these algorithms.</li>
 </ul>
 <blockquote>
