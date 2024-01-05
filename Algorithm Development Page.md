@@ -37,7 +37,7 @@ Ensure explanations are detailed for clarity but concise to maintain interest.</
 <p>Describe the decision-making structures used in the program.</p>
 <blockquote>
 <p>[!NOTE]<br>
-Control structures are fundamental constructs in programming that dictate the flow of control in a program. They include conditional statements like <code>if</code>, <code>else if</code>, and <code>else</code>, as well as looping constructs like <code>for</code>, <code>while</code>, and <code>do-while</code> loops. These structures allow a program to make decisions, execute code conditionally, and perform repetitive tasks, thereby enabling complex logic and behaviors in software development.</p>
+Control structures are fundamental constructs in programming that dictate the flow of control in a program. They include conditional statements like <code>if</code>, <code>elif</code>, and <code>else</code>, as well as looping constructs like <code>for</code> and <code>while</code> loops. These structures allow a program to make decisions, execute code conditionally, and perform repetitive tasks, thereby enabling complex logic and behaviors in software development.</p>
 </blockquote>
 <h3 id="sentence-starters-1">Sentence Starters</h3>
 <blockquote>
