@@ -9,6 +9,10 @@
 <p>[!IMPORTANT]<br>
 Remember, the code you submit for the CPT must be primarily your own work. While collaboration is allowed in some parts, key elements like procedures, algorithms, and data structures should be student-developed. Relying on built-in or existing procedures is not sufficient. Your submission should reflect your understanding and ability to implement concepts learned in class.</p>
 </blockquote>
+<blockquote>
+<p>[!NOTE]<br>
+While the documentation you create here isn’t submitted to the College Board, the process of documenting your project is invaluable. It aids in solidifying your understanding of your project’s intricacies. As you work through your documentation, you’re essentially preparing yourself to answer questions about your project for the AP exam. This documentation serves as a personal reference, helping you recall key details, decisions, and the rationale behind various aspects of your project. Remember, the better you understand and can explain your project, the more prepared you’ll be for the exam’s questions regarding your personal project.</p>
+</blockquote>
 <h2 id="project-overview">Project Overview</h2>
 <h3 id="sentence-starters">Sentence Starters</h3>
 <blockquote>
@@ -90,9 +94,27 @@ Explicitly connect how your project and its documentation meet the CPT requireme
 <p>[!TIP]<br>
 Personalize this section to reflect the diversity of your team and the collaborative effort put into the project. This humanizes your work and shows the teamwork behind the technical creation.</p>
 </blockquote>
-<hr>
+<h2 id="admonitions">Admonitions</h2>
+<p>Throughout this template you will see sections of text that are indented with special color and signal words such as “Tip” or “Warning”. These are called <strong>admonitions</strong>. You can use various types of admonitions to highlight important information, tips, or warnings.</p>
+<p>Each type helps to categorize information, making your documentation clearer and more effective. Choose the type that best fits the context of the information you want to highlight.</p>
 <blockquote>
 <p>[!NOTE]<br>
-While the documentation you create here isn’t submitted to the College Board, the process of documenting your project is invaluable. It aids in solidifying your understanding of your project’s intricacies. As you work through your documentation, you’re essentially preparing yourself to answer questions about your project for the AP exam. This documentation serves as a personal reference, helping you recall key details, decisions, and the rationale behind various aspects of your project. Remember, the better you understand and can explain your project, the more prepared you’ll be for the exam’s questions regarding your personal project.</p>
+This is a note admonition. Use it to include additional information, reminders, or clarifications that can assist the reader in understanding your documentation better.</p>
+</blockquote>
+<blockquote>
+<p>[!TIP]<br>
+This is a tip admonition. It’s great for offering advice, suggesting best practices, or sharing insights that could benefit the reader in their understanding or implementation of the project.</p>
+</blockquote>
+<blockquote>
+<p>[!IMPORTANT]<br>
+This is an important admonition. Use it to highlight crucial information that is essential for the reader to understand or act upon to ensure the success of the project.</p>
+</blockquote>
+<blockquote>
+<p>[!CAUTION]<br>
+This is a caution admonition. It’s useful for warning the reader about potential mistakes, pitfalls, or common errors that they should be aware of and avoid.</p>
+</blockquote>
+<blockquote>
+<p>[!WARNING]<br>
+This is a warning admonition. Employ this for serious issues or advisories where not following the guidance could lead to significant problems or failures in the project.</p>
 </blockquote>
 
