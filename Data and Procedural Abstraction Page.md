@@ -83,5 +83,6 @@ Efficient data handling and processing are key to the performance of Python prog
 <li>Use examples to illustrate these concepts in action.</li>
 <li>Regularly review and test your abstractions to ensure they work as intended and enhance the program’s efficiency.</li>
 </ul>
-<p>Properly documenting data and procedural abstraction practices showcases your proficiency in Python programming and helps in creating efficient, readable, and maintainable code.</p>
+<p>Properly documenting data and procedural abstraction practices showcases your proficiency in Python programming and helps in creating efficient, readable, and maintainable code.<br>
+<a href="index.md">Homepage</a>| <a href="Program%20Design%20and%20Function%20Page.md">Program Design and Function</a> | <a href="Algorithm%20Development%20Page.md">Algorithm Development</a> | <a href="Errors%20and%20Testing%20Page.md">Errors and Testing</a> | <a href="Data%20and%20Procedural%20Abstraction%20Page.md">Data and Procedural Abstraction</a> | <a href="Project%20Change%20Log%20Page.md">Change Log</a></p>
 
