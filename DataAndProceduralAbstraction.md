@@ -69,4 +69,6 @@ Describe how data is handled and processed in your Python program.
 - Regularly review and test your abstractions to ensure they work as intended and enhance the program's efficiency.
 
 Properly documenting data and procedural abstraction practices showcases your proficiency in Python programming and helps in creating efficient, readable, and maintainable code.
-[Homepage](index.md)| [Program Design and Function](Program%20Design%20and%20Function%20Page.md) | [Algorithm Development](Algorithm%20Development%20Page.md) | [Errors and Testing](Errors%20and%20Testing%20Page.md) | [Data and Procedural Abstraction](Data%20and%20Procedural%20Abstraction%20Page.md) | [Change Log](Project%20Change%20Log%20Page.md)
+
+---
+[Homepage](index.md)| [Program Design and Function](ProgramDesignAndFunction.md) | [Algorithm Development](AlgorithmDevelopment.md) | [Errors and Testing](ErrorsAndTesting.md) | [Data and Procedural Abstraction](DataAndProceduralAbstraction.md) | [Change Log](ChangeLog.md)
