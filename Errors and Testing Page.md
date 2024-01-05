@@ -83,4 +83,5 @@ Debugging can be a complex and time-consuming process. It’s often helpful to u
 <p>[!IMPORTANT]<br>
 In your Computer Science Principles CPT, explicit mention and demonstration of error handling is crucial. The CPT guidelines specifically look for evidence of your ability to identify and manage potential errors in your code. This includes not only detecting errors but also implementing strategies to handle them gracefully. This could involve validating inputs, using try-catch blocks, or providing user-friendly error messages. Proper error handling not only improves the robustness of your program but also demonstrates a deeper understanding of programming concepts, which is essential for a successful CPT submission.</p>
 </blockquote>
+<p><a href="index.md">Homepage</a>| <a href="Program%20Design%20and%20Function%20Page.md">Program Design and Function</a> | <a href="Algorithm%20Development%20Page.md">Algorithm Development</a> | <a href="Errors%20and%20Testing%20Page.md">Errors and Testing</a> | <a href="Data%20and%20Procedural%20Abstraction%20Page.md">Data and Procedural Abstraction</a> | <a href="Project%20Change%20Log%20Page.md">Change Log</a></p>
 
