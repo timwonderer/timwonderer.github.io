@@ -5,7 +5,7 @@ baseurl:
 url: "https://timwonderer.github.io" # Your GitHub Pages URL
 
 # Build settings
-markdown: GFM
+markdown: kramdown
 
 # GitHub-specific settings
 repository: timwonderer/timwonderer.github.io
