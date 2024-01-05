@@ -6,7 +6,6 @@ url: "https://timwonderer.github.io" # Your GitHub Pages URL
 
 # Build settings
 markdown: GFM
-theme: minima # Or any other supported theme
 
 # GitHub-specific settings
 repository: timwonderer/timwonderer.github.io
