@@ -92,4 +92,5 @@ Using flowcharts or diagrams can significantly enhance the understanding of the 
 <li><strong>Use Flowcharts or Diagrams</strong>: Where possible, complement your descriptions with visual aids.</li>
 <li><strong>Peer Feedback</strong>: Get feedback on your descriptions to ensure they are clear and understandable to someone unfamiliar with your project.</li>
 </ul>
+<p><a href="index.md">Homepage</a>| <a href="Program%20Design%20and%20Function%20Page.md">Program Design and Function</a> | <a href="Algorithm%20Development%20Page.md">Algorithm Development</a> | <a href="Errors%20and%20Testing%20Page.md">Errors and Testing</a> | <a href="Data%20and%20Procedural%20Abstraction%20Page.md">Data and Procedural Abstraction</a> | <a href="Project%20Change%20Log%20Page.md">Change Log</a></p>
 
