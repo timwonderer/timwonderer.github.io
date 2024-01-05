@@ -53,4 +53,5 @@ Ensure each team member clearly states their name with their contributions. This
 <p>[!TIP]<br>
 Don’t forget to use GitHub’s pull request feature for collaborative feedback on your project. When you make a significant change or want feedback, create a pull request and tag your classmates. This allows them to review your changes, provide comments, and suggest improvements directly on GitHub. It’s a great way to engage with your peers, learn from each other, and make your project stronger. This collaborative approach not only enhances your project but also gives you practical experience in a key aspect of modern software development workflows.</p>
 </blockquote>
+<p><a href="index.md">Homepage</a>| <a href="Program%20Design%20and%20Function%20Page.md">Program Design and Function</a> | <a href="Algorithm%20Development%20Page.md">Algorithm Development</a> | <a href="Errors%20and%20Testing%20Page.md">Errors and Testing</a> | <a href="Data%20and%20Procedural%20Abstraction%20Page.md">Data and Procedural Abstraction</a> | <a href="Project%20Change%20Log%20Page.md">Change Log</a></p>
 
