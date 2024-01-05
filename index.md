@@ -103,5 +103,5 @@ Each type helps to categorize information, making your documentation clearer and
 > [!WARNING]
 > This is a warning admonition. Employ this for serious issues or advisories where not following the guidance could lead to significant problems or failures in the project.
 
-[Homepage](index.md)| [Program Design and Function](Program%20Design%20and%20Function%20Page.md) | [Algorithm Development](Algorithm%20Development%20Page.md) | [Errors and Testing](Errors%20and%20Testing%20Page.md) | [Data and Procedural Abstraction](Data%20and%20Procedural%20Abstraction%20Page.md) | [Change Log](Project%20Change%20Log%20Page.md)
+[Homepage](#index.md)| [Program Design and Function](#ProgramDesignAndFunction.md) | [Algorithm Development](#AlgorithmDevelopment.md) | [Errors and Testing](#ErrorsAndTesting.md) | [Data and Procedural Abstraction](#DataAndProceduralAbstraction.md) | [Change Log](#ChangeLog.md)
 
