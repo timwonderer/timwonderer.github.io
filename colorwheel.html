@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Final Color Wheel – Modular Version</title>
+  <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.css" rel="stylesheet">
+  <style>
+    #content { display: flex; flex-direction: row; gap: 2em; padding: 2em; background-color: #f7f9fc; font-family: 'Segoe UI', sans-serif; }
+    h1 { color: #1a73e8; }
+    .function-list { list-style: none; padding: 0; }
+    .function-list li { margin: 0.5em 0; cursor: pointer; color: #1a73e8; }
+    .function-list li:hover { text-decoration: underline; }
+    .explanation-panel { background-color: #ffffff; border-radius: 8px; padding: 1em; box-shadow: 0 0 4px rgba(0, 0, 0, 0.1); min-height: 200px; }
+    pre, pre code { background-color: #f5f2f0; padding: 1em; border-radius: 8px; white-space: pre-wrap !important; word-break: break-word; overflow-x: hidden; max-width: 100%; }
+  </style>
+</head>
+<body>
+
+<div style="font-family:noto sans; background: #333; padding: 10px;">
+    <h1 style="font-family: noto sans; color: #f0f0f0;">Color Wheel</h1>
+    <p style="font-size:12pt; font-family:noto sans; font-weight:400;  color: #f0f0f0;">
+      A program that can determine and display the RGB value based on the relationship between the coordinate of mouse press, RGB value at max saturation of that point, and distance from the white center. This program showcase how clever math tricks help solves hard problems.
+    </p>
+    <p style="text-align: right;font-size:9pt; font-family:noto sans; font-weight:200;  color: #f0f0f0; font-style:italic;">
+      Original source code is owned by Tim C.
+    </p>
+  </div>
+
+<iframe style="width:60%; height:460px;display:block; margin:auto; border-style:solid; margin-top:1em; box-shadow:0 0 6px #ddd; border-radius:10px; padding: 5px; border-color:#bbb"
+   src="https://academy.cs.cmu.edu/sharing/midnightBlueDog9747/embed"> 
+</iframe>  
+
+<div id="content">
+<div class="column" style="width:40%">
+  <h1>Data Structures</h1>
+  <ul>
+    <li><code>app.color_wheel</code>: A group that holds the gradient lines forming the wheel.</li>
+    <li><code>app.color_list</code>: A list that holds all the RGB value in sequential order from R --> G --> B</li>
+    <li><code>lines_coordinate</code>: A dictionary holding closest line objects to the mouse press and their distance to the mouse press. Needed for reference and retrieval of the line object</li>
+  </ul>
+
+  <h1>Functions</h1>
+  <ul class="function-list">
+    <li onclick="showExplanation('create_color_list')">create_color_list()</li>
+    <li onclick="showExplanation('create_color_wheel')">create_color_wheel()</li>
+    <li onclick="showExplanation('initialize_states')">initialize_states()</li>
+    <li onclick="showExplanation('onMousePress')">onMousePress()</li>
+    <li onclick="showExplanation('onMouseMove')">onMouseMove()</li>
+    <li onclick="showExplanation('display_rgb')">display_rgb()</li>
+    <li onclick="showExplanation('real_time_color')">real_time_color()</li>
+    <li onclick="showExplanation('get_rgb_values')">get_rgb_values()</li>
+  </ul>
+  <h2>Explanation</h2>
+  <div class="explanation-panel" id="explanation">
+    Click a function name to view its explanation.
+  </div>
+</div>
+
+<div class="column" style="width:100%">
+  <h1>Full Code</h1>
+  <pre style="font-size:10pt"><code class="language-python">
+def create_color_list():
+    """
+    Generates a list of RGB tuples that transition through red, green, and blue,
+    forming the base colors for the color wheel.
+    """
+    r, g, b = 255, 0, 0
+    color_list = []
+
+    # Gradually increase green to full
+    while g < 255:
+        g += 1
+        color_list.append((r, g, b))
+
+    # Decrease red to zero
+    while r > 0:
+        r -= 1
+        color_list.append((r, g, b))
+
+    # Increase blue to full
+    while b < 255:
+        b += 1
+        color_list.append((r, g, b))
+
+    # Decrease green to zero
+    while g > 0:
+        g -= 1
+        color_list.append((r, g, b))
+
+    # Increase red back to full
+    while r < 255:
+        r += 1
+        color_list.append((r, g, b))
+
+    # Decrease blue back to zero
+    while b > 0:
+        b -= 1
+        color_list.append((r, g, b))
+
+    return color_list
+
+
+def create_color_wheel(color_list):
+    """
+    Creates the color wheel by drawing lines rotated around the center.
+    Each line has a gradient from white (center) to the RGB color (edge).
+    """
+    color_wheel = Group()
+    angle = 0
+
+    for r, g, b in color_list:
+        # Create a line with gradient fill
+        line = Line(200, 50, 200, 350, fill=gradient(rgb(255, 255, 255), rgb(r, g, b), start="top"))
+        line.rgb = (r, g, b)  # Store the RGB value
+        line.rotateAngle = angle  # Rotate to form the wheel
+        color_wheel.add(line)
+        angle += 0.23529411764  # Increment angle for next slice
+
+    # Adjust all lines to start at the center (200, 200)
+    for line in color_wheel.children:
+        line.x1, line.y1 = 200, 200
+
+    return color_wheel
+
+
+def onMousePress(x, y):
+    """
+    Handles mouse clicks. Finalizes color selection and displays RGB/HEX values.
+    """
+    display_rgb(x, y)
+
+
+def onMouseMove(x, y):
+    """
+    Handles mouse movement. Provides real-time color preview on hover.
+    """
+    if app.color_wheel.hits(x, y):
+        real_time_color(x, y)
+
+
+def initialize_states():
+    """
+    Initializes app components including background, labels, the color wheel, and preview areas.
+    """
+    app.background = 'black'
+    app.selected = None
+    app.rgb_label = Label("", 110, 20, size=18, font='monospace', bold=True)
+    app.hex_label = Label("", 320, 20, size=18, font='monospace', bold=True)
+    app.peripheral = Circle(200, 200, 160, fill=None, border=None, borderWidth=10)  # Preview circle
+    app.reference = Rect(40, 320, 40, 40, fill=None)  # Color swatch
+    app.color_wheel = create_color_wheel(create_color_list())
+
+
+def display_rgb(x, y):
+    """
+    Finds the clicked color, calculates the interpolated RGB value, and updates the swatch and labels.
+    """
+    # Find all lines near the click point and compute distance to their endpoints
+    lines_coordinate = {color: distance(x, y, color.x2, color.y2)
+                        for color in app.color_wheel.children if color.hits(x, y)}
+
+    if lines_coordinate:
+        r, g, b = get_rgb_values(x, y, lines_coordinate)
+        app.reference.fill = rgb(r, g, b)
+
+        # Format RGB and HEX outputs
+        rgb_value = str(app.reference.fill)[3:]
+        hex_value = f"0x{hex(r)[2:]}{hex(g)[2:]}{hex(b)[2:]}"
+        app.rgb_label.value = f"RGB{rgb_value}"
+        app.hex_label.value = hex_value
+
+        # Color the labels for better visibility
+        app.rgb_label.fill = rgb(r, g, b)
+        app.hex_label.fill = rgb(r, g, b)
+
+
+def real_time_color(x, y):
+    """
+    Provides live preview of the color by updating the peripheral circle's border as the mouse moves.
+    """
+    lines_coordinate = {color: distance(x, y, color.x2, color.y2)
+                        for color in app.color_wheel.children if color.hits(x, y)}
+
+    if lines_coordinate:
+        r, g, b = get_rgb_values(x, y, lines_coordinate)
+        app.peripheral.border = rgb(r, g, b)
+
+
+def get_rgb_values(x, y, locations):
+    """
+    Interpolates the color between the selected line's color and white based on distance from the center.
+    Returns the final RGB values.
+    """
+    # Sort lines by distance to click point (closest first)
+    app.selected = sorted(locations.items(), key=lambda item: item[1])[0][0]
+
+    # Calculate how far the click is from the center toward the line's endpoint
+    line_length = distance(app.selected.x2, app.selected.y2, app.selected.x1, app.selected.y1)
+    click_length = rounded(distance(x, y, 200, 200))
+    dist_to_white = line_length - click_length  # How far from white
+
+    # Interpolate each RGB component toward white (255)
+    r, g, b = app.selected.rgb
+    r_range, g_range, b_range = (255 - r) / 150, (255 - g) / 150, (255 - b) / 150
+    return rounded(r + dist_to_white * r_range), rounded(g + dist_to_white * g_range), rounded(b + dist_to_white * b_range)
+
+
+def main():
+    """
+    Entry point to initialize the app.
+    """
+    initialize_states()
+
+
+main()
+</code></pre>
+</div>
+</div>
+
+<script>
+const explanations = {
+  create_color_list: "Generates the RGB sequence for the color wheel.",
+  create_color_wheel: "Uses the RGB list to draw gradient lines forming the color wheel.",
+  initialize_states: "Initializes app components including labels, preview areas, and the color wheel.",
+  onMousePress: "Triggers color selection, displaying RGB and HEX values.",
+  onMouseMove: "Provides live hover preview of the color on the peripheral circle.",
+  display_rgb: "Displays selected color in the swatch and updates the labels. Meets CPT requirement for procedure",
+  real_time_color: "Updates the peripheral circle's border color on hover. Meets CPT requirement for procedure",
+  get_rgb_values: "Interpolates the tint between the line color and white based on distance."
+};
+
+function showExplanation(key) {
+  const panel = document.getElementById("explanation");
+  panel.textContent = explanations[key] || "No explanation available.";
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script>
+</body>
+</html>

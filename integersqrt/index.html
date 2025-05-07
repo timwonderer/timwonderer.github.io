@@ -1,0 +1,162 @@
+<!doctype html>
+<html>
+  <head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  </head>
+  <body>
+     <div style="font-family:noto sans; background: #333; padding: 10px;">
+    <h1 style="font-family: noto sans; color: #f0f0f0;">Integer Square Root Finder</h1>
+    <p style="font-size:12pt; font-family:noto sans; font-weight:400;  color: #f0f0f0;">
+      A neat program that can quickly and efficiently locate the integer square root of a number if one exist. This program demonstrates the importance of thinking outside the box and experimentation.
+    </p>
+    <p style="text-align: right;font-size:9pt; font-family:noto sans; font-weight:200;  color: #f0f0f0; font-style:italic;">
+      Original source code is owned by Tim C.
+    </p>
+    </div>
+<div id="content-container">
+
+<h1>The beginning of madness</h1>
+
+<p>The <span class="red-text">integer square root finder</span> is a program I have written during the Thanksgiving break of 2023 just for fun. This program is not really a demonstration of any particular coding paradigm or ways to manage complexity. It's more of a nerdy topic that got me into a 3-day coding marathon: <i>how to write a program that is highly efficient?</i> 
+
+<p><i><span class="red-text">Efficient</span></i> means it uses the least amount of time, takes the least amount of steps, uses the smallest amount of resources, or any combination of the above. This is a hot topic in both computer science and also algorithm design in mathematics (but also just fun to think about).</p>
+
+<p>The initial idea came from another for-fun project I was writing to determine whether a given number is a prime number or not (<a href="https://en.wikipedia.org/wiki/Prime_number">here's a link on prime number if you need a refresher</a>). I was trying to write a simple program that implements different checks (written as procedures) on the number to determine whether they have a divisor or not. </p>
+
+<p>One of the test to determine primality is checking whether the given number has a positive integer (whole number) square root - if a number has an integer square root, it cannot be a prime number. When I was testing the prime number program (<em>which was making all sorts of mistakes and not very reliable but <sup>who cares</sup></em>), I noticed the step that took the longest was the square root test. In fact, some execution will cause the program to either stall or the computer to crash because it ran out of memory.</p> 
+
+<p><b>But why?</b></p>
+
+<h1>Initial Algorithm on Finding Square Root</h1>
+
+<p>The original implementation of the procedure was designed as followed:</p>
+
+<div class='blockquote'>
+  <ul>
+<li>Divide the given number by 2 and round down to nearest whole number. Call this number <span class='code-snip'>midpoint</span></li>
+
+<li>Square every number from 3 to <span class='code-snip'>midpoint</span>. If the resultant numbers don't match the given number, there's no integer square root.</li>
+</ul>
+</div>
+
+<p>This is pretty much brute force: square every single number until we either find it or we run out of numbers.</p> 
+
+<p>While Python is very good at handling large numbers, imagine finding the square root for a number as large as 2<sup>500</sup>. </p>
+
+<div class='number'><p><b>2<sup>500</sup> written out fully would be:</b></p> 3273390607896141870013189696827599152216642046043064789483291368096133796404674554883270092325904157150886684127560071009217256545885393053328527589376</div>
+
+<div class='number'><p><b>If we check from 3 all the way up to its halfway value, it would be:</b></p>1636695303948070935006594848413799576108321023021532394741645684048066898202337277441635046162952078575443342063780035504608628272942696526664263794688</div>
+
+<p><i>(by the way, both the original number and its half is 151 digits long).</i></p>
+
+<p>As fast as computer can go, that's a lot of number and occupies a lot of memory resources. While finding square root is not very practical in everyday life, it's critical in many branches of applied sciences and encryption. It is obvious that brute force is highly inefficient because we wouldn't know there isn't a root until we square a number and the resultant is higher than the given before checking the whole list.</p>
+
+<p>The worst case scenario would be <u>there isn't one</u> (that means you wasted a lot of time checking for nothing).</p> 
+
+<p>So the question is, <i>how do we make this process more efficient by narrowing down our range so we don't have to square that many numbers? </i>(by the way, Python has a built in <span class='code-snip'>math.sqrt()</span> procedure already <sup>but I am crazy like that</sup>)</p>
+
+<h1>The Optimized Algorithm on Finding Square Root</h1>
+
+  <h2>If we don't have to, <i>let's not</i></h2>
+  
+  <p>Since squaring every number is the slowest step and would require the most resources, if I can avoid doing it, I should.</p>
+  
+  <p>First, I check to see if the number provided is 1, 0, or -1. Those don't need to be checked because those are governed by special rules. So for those cases, I just provide the defined value for root of 1, 0, and -1 (which are 1, 0, and i).</p>
+  
+  <p>Next, I checked the number to see if it ends in 2, 3, 7, or 8.</p>
+  
+  <p>Why those numbers, you asked?</p>
+  
+  <p>Do you know any whole number, when squared, will give you 2, 3, 7, or 8 as ending? If you can't think of any, that's because there isn't any integer, when squared, give 2, 3, 7, or 8 ending digit. When the given number ends in 2, 3, 7, 8, the program will terminate early and indicate there's no integer root without having to check the rest.</p>
+  
+  <p>At the end of the ending test, we have eliminated 40% of all numbers from the pool (for every 10 numbers, 4 will end in 2, 3, 7, 8).</p>
+  
+  <h2>Sometimes brute force is the best force</h2>
+  
+  <p>Now, sometimes the number is trivially small and it's really easy for computer to just square every number up to the midpoint. In those instances (which I arbitrarily set to be at or below 1000000), I will simply square all numbers until half the supplied value. Is this really the most efficient way? I don't know because the program takes a fraction of a second to complete the whole thing.</p>
+  
+  <p>If we haven't eliminated the number at this point, our number must be larger than 1000000 and has ending digit of 1, 4, 5, 6, 9, or 0. </p>
+  
+  <h2>Finding a needle in a haystack is easier if the haystack is small</h2>
+  
+  <p>Going back to the initial problem of finding whether 2<sup>500</sup> has an integer square root (by the way, it does because it has an even exponent <sup>but more on that later</sup>). How can we find its integer square root (if it has one) without having to go through all the numbers (or even half the amount of numbers)?</p>
+  <p>I started to look for patterns to see if there's a relationship between numbers and their roots (like, is there a relationship between the number of digits in the original number vs. number of digits in the roots?) Because if there is, maybe I can take advantage of it and narrow down my search to a small segment of numbers.</p>
+  <p>It took me about a day and a half before I notice an interesting pattern: <i>the root of a number somehow has around half as many digits as the original number.</i></p>
+  <p>I am pretty sure there's a name for this in math, but since I don't know, I'm going to call it my hypothesis. <b>This is my hypothesis:</b></p>
+<div class='blockquote'> 
+<p>Given: 
+<ul>
+  <li>x is an integer</li>
+  <li>y is the number of digits x has</li>
+  <li>z is half of y</li>
+</ul>
+<p>If x has an integer square root, it can be found in one of the following ranges:</p>
+<ol>
+<li>If y is an even number, the range where we can possibly find integer square root of x would be between 10<sup>(z-1)</sup>and 10<sup>z</sup>.</li>
+<li>If y is an odd number, the range where we can possibly find integer square root of x would be between 10<sup>z</sup> and 10<sup>(z+1)</sup></li>
+</ol></div>
+<p>(if you know a famous mathematician, please have them check if this is true)</p>
+<p>Using this newly discovered pattern, I can narrow down the range to find the root of 2<sup>500</sup> to between:</p>
+<div class="number">1000000000000000000000000000000000000000000000000000000000000000000000000000</div>
+and
+<div class="number">10000000000000000000000000000000000000000000000000000000000000000000000000000</div>
+<p>That's about <span class="number">9000000000000000000000000000000000000000000000000000000000000000000000000000</span> numbers I still need to check (75 digits), which way better than before (scroll up to see it). But even if our range is smaller, that is still way too many numbers to check. Can we narrow down even further? </p>
+<p><i>It turns out, we totally can.</i></p>
+<h2>Warmer, warmer, colder, colder</h2>
+<p>To fine tune the search range, I used binary search to find out whether the number is at the upper or lower end of the range. While the previous process already reduced the number drastically, it is still a large range when are number is really, really big.</p>
+<p>The way binary search works is very simple:</p>
+<div class='blockquote'>
+    <p>Given:</p>
+    <ol>
+      <li>Set the variable <span class="code-snip">ceiling</span> to the maximum of the range</li>
+      <li>Set the variable <span class="code-snip">floor</span> to the minimum of the range</li>
+    </ol>
+    <p>Repeat the following algorithm until we have either found the integer square root or the difference between <span class="code-snip">ceiling</span> and <span class="code-snip">floor</span> is less than 10:</p>
+    <ol>
+      <li>Set the variable <span class="code-snip">mid</span> to half of <span class="code-snip">ceiling</span></li>
+      <li>Calculate the value of <span class="code-snip">mid</span><sup>2</sup> and evaluate the following conditions:</li>
+      <ul>
+      <li>If the value of <span class="code-snip">mid</span><sup>2</sup> is equal to the original value, we have found our integer root.</li>
+      <li>If the value of <span class="code-snip">mid</span><sup>2</sup> is larger than our original value, set the value of <span class="code-snip">ceiling</span> to the value of <span class="code-snip">mid</span> and restart the process</li>
+      <li>If the value of <span class="code-snip">mid</span><sup>2</sup> is smaller than our original value, set the value of <span class="code-snip">floor</span> to the value of <span class="code-snip">mid</span> and restart the process</li>
+    </ul>
+    </ol>
+  </div>
+<p>When the binary search process is done, I narrowed down the range to find the root of 2<sup>500</sup> to between</p> 
+<div class="number">1809251394333065553493296640760748560207343510400633813116524750123642650615</div>
+<p>and</p>
+<div class="number">1809251394333065553493296640760748560207343510400633813116524750123642650625</div>
+<p>That is only 10 numbers I have to check!</p>
+<p>I just need to square each of the 10 numbers and see if any of them give me the original value. If so, I have found the root. If not, I pat myself on the back for only wasting time checking (at most) 10 numbers.</p>
+<p>In our case, 2<sup>500</sup> does have an integer root, which is:</p>
+<div class="number">1809251394333065553493296640760748560207343510400633813116524750123642650624</div>
+<div class='fun'>
+  <p><b>Fun Fact</b></p>
+  <p>We can actually determine whether a number (given in exponential form) has an integer square root without calculating it. All we need to do is <i>determine whether the exponential term is even or odd.</i></p>
+    <p>Confused? Well, you probably remember learning this in math:</p>
+    <div class='math'>(x<sup>a</sup>)<sup>b</sup>=x<sup>a&sdot; b</sup></div>
+    <p>What does this have anything to do with even number?</p>
+    <p>Every even number is divisible by 2. So we can write any even number (we'll call it c) as some other number (call it a) times 2: </p>
+    <div class='math'>c = a &sdot; 2 &emsp; c is an even number</div>
+    <p>Our original number 2<sup>500</sup> has an even exponent of 500. That number can be written as:</p>
+    <div class='math'>500 = a &sdot;  2</div>
+    <p>What number times 2 gives us 500? That will be 250! This means we can rewrite our number 2<sup>500</sup> as</p>
+    <div class='math'>2<sup>500</sup> = 2<sup>250&sdot;2</sup> = (2<sup>250</sup>)<sup>2</sup></div>
+    <p>Did you catch that? 2<sup>500</sup> is basically 2<sup>250</sup> squared! So the square root of 2<sup>500</sup> is just 2<sup>250</sup></p>
+    <p>Based on what we have discovered, numbers with even exponents will have an integer square root!</p>
+
+
+</div>
+<p>I hope this little crazy side project of mine has taught you one important thing about programming: simple code doesn't always mean the code is good. Sometimes, good program takes a while to conceptualize. It might take some unconventional experimentation to find the best way to solve a problem.</p>
+<p>In my case, staring at the number and counting digits ended up being the best solution for this problem.</p>
+<h1>Full Program Code</h1>
+ <p> You can try it out and see if you can use some of the structure in your own code. I also included a timer for you to see how long it took to perform the calculations. In our example, finding the square root of 2<sup>500</sup> took less than 0.001 seconds. </p>
+
+</div>
+<iframe src="https://trinket.io/embed/python3/4fd6996c55?runOption=run" width="100%" height="600" frameborder="0" marginwidth="0" marginheight="0" allowfullscreen></iframe>
+</body>
+</html>

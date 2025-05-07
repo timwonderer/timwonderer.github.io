@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Simplify Square Root</title>
+  <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+   <div style="font-family:noto sans; background: #333; padding: 10px;">
+    <h1 style="font-family: noto sans; color: #f0f0f0;">Quadratic Formula Solver</h1>
+    <p style="font-size:12pt; font-family:noto sans; font-weight:400;  color: #f0f0f0;">
+      A production ready program that showcase how to refactor a complex program into smaller modules that can be imported as needed to ensure modularity. 
+    </p>
+    <p style="text-align: right;font-size:9pt; font-family:noto sans;  color: #f0f0f0; font-style:italic;">
+      Source code developed by Tim C. with contributions from Derek T. 
+    </p>
+  </div>
+<iframe src="https://trinket.io/embed/python3/766b0ed3e86e?start=result" width="100%" height="600" frameborder="0" marginwidth="0" marginheight="0" allowfullscreen></iframe>
+<div id="content">
+  <h1>Overview</h1>
+<p class="content">The Quadratic Formula Solver is an extension of the simplify square root program developed by Derek T.</p>
+<p class="content">The discriminant, or the value under the radical sign, is one of the most important part of the formula because it tells us how many solutions (and what kind) should we anticipate. The simplify square root program takes a step further by giving a nicely simplified square root value using a preset list of prime numbers up to 1000. The prime number list is used to determine whether any of those numbers is a factor of the discriminant. If so, it may be simplified.</p>
+<p class="content">This program builds on top of foundation of the square root simplifier but expanded to handle larger number (upwards to about 10<sup>7</sup> before major slowdown happens). Because the program can't predict what number will be given, it must be able to adapt. The highest prime number factor that any given number has is less than or equal to the square root of the original number. Therefore, if the discriminant has a factor, the largest factor is either at or below the square root of the discriminant.</p>
+
+<p class="content"><i>However, how do we determine the square root of a number?</i></p>
+<p class="content">
+  Tim C. identified an interesting pattern between the number of digits a given number has and the possible range where the square root can be found. <a href="https://timwonderer.trinket.io/sites/simplify-square-root-site">You can read about the development of that algorithm here.</a> This program uses that algorithm but instead of only returning the value when it is found, it will return either the exact root or the closest value possible.
+</p>
+
+<h1>Modular Architecture</h1>
+<p class="content">Once the integer square root is identified or approximated, the program uses it to limit the search space for simplifying the square root. This dramatically improves efficiency compared to checking all primes up to the original number, especially as the discriminant grows larger.</p>
+
+<p class="content">From there, the program transitions to solving the quadratic equation itself. The <code>quadratic_function_solver</code> module handles this process. It calculates the discriminant from the given coefficients <i>a</i>, <i>b</i>, and <i>c</i>, then determines whether the result will involve a real or complex solution. If the discriminant is non-negative, it proceeds with root simplification. If the discriminant is negative, the module acknowledges the result as a complex number and handles it accordingly.</p>
+
+<p class="content">At this stage, the solver passes the simplified square root and coefficients to the <code>reduce_fraction</code> module. This component ensures that fractional coefficients in the final answer are presented in their lowest terms. It includes logic to handle edge cases—like negative signs in the denominator or zero values—so the output is mathematically accurate and visually clean.</p>
+
+<p class="content">All results—whether they involve irrational numbers, reduced fractions, or decimal approximations—are then formatted for presentation using the <code>answer_formatter</code> module. This module is designed with both clarity and mathematical integrity in mind. For example, when appropriate, it will return a simplified radical form such as <code>3 ± √2/4</code>, but if the roots are decimals or complex, it adjusts its formatting rules accordingly to avoid ambiguity.</p>
+
+<h1>Main Program Flow</h1>
+<p class="content">The overall flow of the program is orchestrated through the <code>main.py</code> file. This is where the user inputs are received, modules are called, and results are printed. The main script is designed to be modular and readable, emphasizing the learning goals behind the project: to reinforce how large, mathematical procedures can be broken down into clear, testable components.</p>
+
+<h1>Conclusion</h1>
+<p class="content">By designing each module to handle a specific piece of the algorithm—finding integer square roots, simplifying radicals, reducing fractions, and formatting answers—this program not only solves quadratic equations but also serves as a model for how to architect complex mathematical software. It's a layered, transparent system that can be expanded, tested, or optimized further. And most importantly, it helps reinforce algorithmic thinking by forcing me to re-implement foundational mathematical operations rather than relying on shortcuts or built-in functions.</p>
+
+</div>
+</body>
+</html>

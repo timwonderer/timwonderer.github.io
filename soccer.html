@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Soccer Ball Dodge Game – Full Code with Explanations</title>
+  <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <style>
+    #content {
+      display: flex;
+      flex-direction: row;
+      gap: 2em;
+      padding: 2em;
+      background-color: #f7f9fc;
+      font-family: noto sans;
+    }
+    .column {}
+    h1 {
+      color: #1a73e8;
+      font-family: noto sans;
+    }
+    .function-list {
+      list-style: none;
+      padding: 0;
+    }
+    .function-list li {
+      margin: 0.5em 0;
+      cursor: pointer;
+      color: #1a73e8;
+    }
+    .function-list li:hover {
+      text-decoration: underline;
+    }
+    .explanation-panel {
+      background-color: #ffffff;
+      border-radius: 8px;
+      padding: 1em;
+      box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+      min-height: 200px;
+    }
+    pre, pre code {
+      background-color: #f5f2f0;
+      padding: 1em;
+      border-radius: 8px;
+      white-space: pre-wrap !important;
+      word-break: break-word;
+      overflow-x: hidden;
+      max-width: 100%;
+    }
+  </style>
+</head>
+<body>
+<div style=" background: #333; padding: 10px;">
+  <h1 style="color: #f0f0f0;">Soccer Ball Dodge Game</h1>
+  <p style="font-size:12pt; color: #f0f0f0;">An arcade-style game that increases in difficulty as your score increases. This game showcase how using data structures such as a group can manage highly dynamic elements in a game (such as the obstacles that updates every round). </p>
+  <p style="text-align: right;font-size:9pt; color: #f0f0f0; font-style:italic;">Original source code is owned by Oscar C.</p>
+</div>
+
+<iframe style="width:60%; height:460px;display:block; margin:auto; border-style:solid; margin-top:1em; box-shadow:0 0 6px #ddd; border-radius:10px; padding: 5px; border-color:#bbb"
+   src="https://academy.cs.cmu.edu/sharing/saddleBrownShark3517/embed"> 
+</iframe>  
+
+<div id="content">
+<div class="column" style="width:40%">
+  <h1>Data Structures</h1>
+  <strong>Data Structure Overview:</strong><br>
+  <ul>
+    <li><code>app.obstacles = Group()</code> holds all enemy circles on screen.</li>
+    <li><code>app.dx / app.dy</code> are velocity components for moving the ball.</li>
+    <li><code>score = Label(...)</code> is used to track points earned from scoring goals.</li>
+    <li><code>overlay</code> is a visual feedback element to indicate a goal has been reached.</li>
+  </ul>
+  <strong>Why this structure makes sense:</strong>
+  <ul>
+    <li><code>Group</code> makes it easy to track and clear all obstacles at once.</li>
+    <li>Separate <code>dx</code> and <code>dy</code> allow directional movement via arrow keys.</li>
+    <li>Visual layers like <code>overlay</code> add polish and feedback for players.</li>
+  </ul>
+  <h1>Functions</h1>
+  <ul class="function-list">
+    <li onclick="showExplanation('create_obstacles')">create_obstacles()</li>
+    <li onclick="showExplanation('set_game_state')">set_game_state()</li>
+    <li onclick="showExplanation('onKeyPress')">onKeyPress()</li>
+    <li onclick="showExplanation('check_ball_position')">check_ball_position()</li>
+    <li onclick="showExplanation('onStep')">onStep()</li>
+    <li onclick="showExplanation('animate_ball')">animate_ball()</li>
+    <li onclick="showExplanation('resetBall')">resetBall()</li>
+  </ul>
+  <h2>Explanation</h2>
+  <div class="explanation-panel" id="explanation">
+    Click a function name to view its explanation.
+  </div>
+</div>
+
+<div class="column" style="width:100%">
+  <h1>Full Code</h1>
+    <table style="width: 100%; border-collapse: collapse;  border: 2px solid #eb483f; margin-top: 1em; margin-bottom: 1em;">
+  <tr>
+    <td style="width: 5px;  text-align: center; font-size: 1.5em; background-color: #eb483f;"></td>
+    <td style="padding: 1em; color: #222; background-color:#faeeed">
+      <strong><span style="color:#eb483f; font-size:15pt">❌ Danger: DO NOT ATTEMPT</span></strong><br> Copying someone else's code and use it as your own is a serious offense per College Board AP rule which may result in test cancellation and permanent ban from all College Board tests. <br><br> You may reference algorithm and logic used in the code but you cannot copy any part of the code to use.
+    </td>
+  </tr>
+</table>
+  <pre style="font-size:10pt"><code class="language-python">
+import random
+
+# Set the game to update 30 times per second and set the background color
+app.stepsPerSecond = 30
+app.background = 'green'
+
+# Define the goal area (white rectangle) and an overlay for a visual "hit" effect
+goal = Rect(340, 160, 60, 80, fill='white')
+overlay = Rect(340, 160, 60, 80, fill='midnightblue', opacity=0)
+
+# Display the current score as a label at the bottom of the canvas
+score = Label(0, 350, 30, size=20, fill='white')
+
+# Group to hold all obstacle "players"
+app.obstacles = Group()
+
+def create_obstacles(score):
+    """
+    Populate the obstacles group with non‐overlapping circles.
+     
+    The number of obstacles is equal to score + 4, capped at 20.
+    Each new circle is placed at random within the play area,
+    then tested against existing obstacles and the goal to avoid
+    overlaps. Invalid circles are immediately removed.
+    """
+    # Determine how many obstacles we want, but never more than 20
+    count = score + 4
+    if count > 20:
+        count = 20
+
+    # Keep looping until we have the desired number of valid obstacles
+    while len(app.obstacles) < count:
+        # Choose a random center for the new obstacle, leaving a 10px margin
+        x_val = random.randint(10, 390)
+        y_val = random.randint(10, 390)
+        obstacle = Circle(x_val, y_val, 10,
+                          fill='white', border='black', borderWidth=2)
+
+        # Check against every existing obstacle for overlap or too-close placement
+        for other in app.obstacles.children:
+            # If it physically overlaps or sits too close (<50px), discard it
+            if obstacle.hitsShape(other) or obstacle.hitsShape(goal):
+                app.group.remove(obstacle)
+                break
+            elif distance(x_val, y_val, other.centerX, other.centerY) < 50:
+                app.group.remove(obstacle)
+                break
+        else:
+            # If it passed all checks, add it to the obstacles group
+            app.obstacles.add(obstacle)
+
+# Draw visual arrows indicating possible shooting directions
+directions = Group(
+    Line(50, 300, 50, 250, fill='white'),
+    Line(50, 300, 100, 300, fill='white'),
+    Line(50, 300, 50, 350, fill='white'),
+    Line(50, 300, 0, 300, fill='white')
+)
+
+# Create the soccer ball as a circle
+ball = Circle(200, 350, 10, fill='midnightblue', border="darkred", borderWidth=1.5)
+
+def set_game_state(score):
+    """
+    Reset the ball's velocity to zero and set its speed based on score.
+    
+    Base speed is score + 2, so the game gets faster as you score more.
+    """
+    app.dx = 0
+    app.dy = 0
+    app.speed = score + 2
+
+def onKeyPress(key):
+    """
+    Respond to arrow‐key presses by setting the ball's velocity.
+    
+    - 'up'    → negative dy (move upward)
+    - 'down'  → positive dy (move downward)
+    - 'left'  → negative dx (move left)
+    - 'right' → positive dx (move right)
+    
+    The magnitude of dx/dy is determined by app.speed.
+    """
+    if key == 'up':
+        app.dy = -app.speed
+    elif key == 'right':
+        app.dx = app.speed
+    elif key == 'down':
+        app.dy = app.speed
+    elif key == 'left':
+        app.dx = -app.speed
+
+def check_ball_position(ball, obstacles):
+    """
+    Check for collisions and scoring on each frame:
+    
+    1. If the ball hits an obstacle:
+       - Flash the background red
+       - Pause briefly
+       - Reset the ball position
+       - Clear and recreate obstacles
+       - Update game speed
+       - Restore the background
+    2. If the ball enters the goal rectangle:
+       - Increment the score
+       - Reset ball and obstacles
+       - Update game speed
+    3. Fade the green overlay in when the ball overlaps the goal,
+       fade it out otherwise.
+    """
+    # Check for obstacle collisions
+    for obstacle in obstacles:
+        if obstacle.hitsShape(ball):
+            app.background = 'red'
+            sleep(1)  # pause the game loop for a moment
+            resetBall()
+            app.obstacles.clear()
+            create_obstacles(score.value)
+            set_game_state(score.value)
+            app.background = 'darkGreen'
+            print("speed is", app.speed, "and obstacle count is", score.value + 4)
+
+    # Check for successful goal scoring
+    if goal.containsShape(ball):
+        score.value += 1
+        resetBall()
+        app.obstacles.clear()
+        create_obstacles(score.value)
+        set_game_state(score.value)
+        print("speed is", app.speed, "and obstacle count is", score.value + 4)
+
+    # Handle the goal‐hit overlay fade
+    if goal.hitsShape(ball):
+        if overlay.opacity < 100:
+            overlay.opacity += 5
+    else:
+        if overlay.opacity > 0:
+            overlay.opacity -= 5
+
+def onStep():
+    """
+    Main loop called each animation step.
+    
+    - Move the ball
+    - Check for collisions and scoring
+    """
+    animate_ball(app.dx, app.dy)
+    check_ball_position(ball, app.obstacles)
+
+def animate_ball(dx, dy):
+    """
+    Move the ball by (dx, dy) and bounce off canvas edges.
+    
+    Uses the ball's radius and the known 400×400 canvas bounds
+    to detect left/right/top/bottom collisions, inverting the
+    corresponding velocity component on impact.
+    """
+    ball.centerX += dx
+    ball.centerY += dy
+
+    # Bounce horizontally
+    if (ball.centerX - ball.radius) <= 0 or (ball.centerX + ball.radius) >= 400:
+        app.dx *= -1
+
+    # Bounce vertically
+    if (ball.centerY - ball.radius) <= 0 or (ball.centerY + ball.radius) >= 400:
+        app.dy *= -1
+
+def resetBall():
+    """
+    Return the ball to its starting position (50, 300).
+    """
+    ball.centerX = 50
+    ball.centerY = 300
+
+# Initial setup: place ball, obstacles, and configure speed
+resetBall()
+create_obstacles(score.value)
+set_game_state(score.value)
+</code></pre>
+</div>
+</div>
+
+<script>
+const explanations = {
+  create_obstacles: "Generates randomly placed circular obstacles based on current score. Ensures no overlap with other objects or the goal.",
+  set_game_state: "Resets the ball speed and updates it based on the current score. Ball starts still each round.",
+  onKeyPress: "Handles user arrow key inputs. Each direction changes the ball's movement vector.",
+  check_ball_position: "Detects goal scoring and obstacle collision. Handles game reset, score update, and visual effects.",
+  onStep: "Runs every animation frame. Moves the ball and checks game status.",
+  animate_ball: "Moves the ball on screen and handles boundary collision by bouncing it back.",
+  resetBall: "Returns the ball to its starting position (50, 300)."
+};
+
+function showExplanation(key) {
+  const panel = document.getElementById("explanation");
+  panel.textContent = explanations[key] || "No explanation available for this line.";
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script>
+</body>
+</html>

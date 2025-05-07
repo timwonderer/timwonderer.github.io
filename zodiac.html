@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Zodiac Lookup Tool – Full Code with Explanations</title>
+  <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <style>
+    #content {
+      display: flex;
+      flex-direction: row;
+      gap: 2em;
+      margin: 0;
+      padding: 2em;
+      background-color: #f7f9fc;
+      font-family: 'noto sans', sans-serif;
+    }
+    .column {
+
+
+    }
+    h1 {
+      color: #1a73e8;
+    }
+    .function-list {
+      list-style: none;
+      padding: 0;
+    }
+    .function-list li {
+      margin: 0.5em 0;
+      cursor: pointer;
+      color: #1a73e8;
+    }
+    .function-list li:hover {
+      text-decoration: underline;
+    }
+    .explanation-panel {
+      background-color: #ffffff;
+      border-radius: 8px;
+      padding: 1em;
+      box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+      min-height: 200px;
+    }
+    pre, pre code {
+      background-color: #f5f2f0;
+      padding: 1em;
+      border-radius: 8px;
+      white-space: pre-wrap !important;
+      word-break: break-word;
+      overflow-x: hidden;
+      max-width: 100%;
+    }
+  </style>
+</head>
+<body>
+   <div style="font-family:noto sans; background: #333; padding: 10px;">
+  <h1 style="font-family: noto sans; color: #f0f0f0;">Zodiac Sign Look Up Tool</h1>
+  <p style="font-size:12pt; font-family:noto sans; font-weight:400;  color: #f0f0f0;">An app to demonstrate the use of nested dictionary to organize linked datasets and reference specific items within the collection</p>
+  <p style="text-align: right;font-size:9pt; font-family:noto sans; font-weight:200;  color: #f0f0f0; font-style:italic;">Original source code is owned by Christian F.</p>
+  </div>
+<iframe style="width:60%; height:460px;display:block; margin:auto; border-style:solid; margin-top:1em; box-shadow:0 0 6px #ddd; border-radius:10px; padding: 5px; border-color:#bbb"
+   src="https://academy.cs.cmu.edu/sharing/khakiTiger3822/embed"> 
+ </iframe>  
+
+<div id="content">
+<div class="column" style="width:40%">
+  <h1>Data Structures</h1>
+  <strong>Data Structure Overview:</strong><br>
+      This program uses a nested dictionary structure to organize the zodiac signs:
+      <ul>
+        <li><code>month_split = {month:{ date_range: sign }}</code> maps each month to two date ranges, and each date range to a zodiac sign.</li>
+        <li><code>ui_buttons = {Label(month):{Label(date):Label(sign)}}</code> is a dictionary that tracks the UI elements tied to data.</li>
+      </ul>
+      <strong>Why this structure makes sense:</strong><br>
+      <ul>
+        <li>The outer dictionary (by month) lets us isolate logic and visuals by month quickly.</li>
+        <li>The nested structure mirrors the logical hierarchy: Month → Dates → Sign.</li>
+        <li>Labels are used as keys to make it easy to handle click detection and update the visual state.</li>
+        <li>Mapping UI objects to related data allows fast updates and minimal code duplication when showing/hiding elements.</li>
+      </ul>
+    <h1>Functions</h1>
+    <ul class="function-list">
+      <li onclick="showExplanation('make_background_title')">make_background_title()</li>
+      <li onclick="showExplanation('make_ui')">make_ui()</li>
+      <li onclick="showExplanation('ui_control')">ui_control()</li>
+      <li onclick="showExplanation('onMousePress')">onMousePress()</li>
+      <li onclick="showExplanation('month_selector')">month_selector()</li>
+      <li onclick="showExplanation('date_selector')">date_selector()</li>
+      <li onclick="showExplanation('month_display_control')">month_display_control()</li>
+      <li onclick="showExplanation('date_display_control')">date_display_control()</li>
+      <li onclick="showExplanation('main')">main()</li>
+    </ul>
+    <h2>Explanation</h2>
+    <div class="explanation-panel" id="explanation">
+
+
+      Click a function name to view its explanation.
+    </div>
+  </div>
+
+  <div class="column" style="width:100%">
+    <h1>Full Code</h1>
+    <table style="width: 100%; border-collapse: collapse;  border: 2px solid #eb483f; margin-top: 1em; margin-bottom: 1em;">
+  <tr>
+    <td style="width: 5px;  text-align: center; font-size: 1.5em; background-color: #eb483f;"></td>
+    <td style="padding: 1em; color: #222; background-color:#faeeed">
+      <strong><span style="color:#eb483f; font-size:15pt">❌ Danger: DO NOT ATTEMPT</span></strong><br> Copying someone else's code and use it as your own is a serious offense per College Board AP rule which may result in test cancellation and permanent ban from all College Board tests. <br><br> You may reference algorithm and logic used in the code but you cannot copy any part of the code to use.
+    </td>
+  </tr>
+</table>
+    <pre style="font-size:10pt"><code class="language-python">
+def make_background_title():
+    """
+    Create and display the title and background panels for visual structure.
+    Panels divide the UI into left, center, and right sections for layout.
+    """
+    title = Label("Zodiac Sign Look Up Tool", 200, 15, size=20, fill='gold', font='montserrat', bold=True)
+
+    # Background color blocks help organize UI visually
+    left_panel = Rect(0, title.bottom + 5, 120, 400 - title.bottom + 5, fill=rgb(224, 255, 246))
+    middle_panel = Rect(left_panel.right, title.bottom + 5, 170, 400 - title.bottom + 5, fill=rgb(251, 235, 252))
+    right_panel = Rect(middle_panel.right, title.bottom + 5, 400 - middle_panel.right, 400 - title.bottom + 5, fill=rgb(215, 222, 252))
+
+def make_ui():
+    """
+    Constructs the user interface: month buttons, hidden date range labels, and zodiac sign labels.
+    Uses a nested dictionary where month Label objects map to date Label objects, each tied to a sign Label.
+    """
+    month_split = {
+        "January": {"Jan 1 to Jan 19": "Capricorn", "Jan 20 to Jan 31": "Aquarius"},
+        "February": {"Feb 1 to Feb 18": "Aquarius", "Feb 19 to Feb 29": "Pisces"},
+        "March": {"Mar 1 to Mar 20": "Pisces", "Mar 21 to Mar 31": "Aries"},
+        "April": {"Apr 1 to Apr 19": "Aries", "Apr 20 to Apr 30": "Taurus"},
+        "May": {"May 1 to May 20": "Taurus", "May 21 to May 31": "Gemini"},
+        "June": {"Jun 1 to Jun 20": "Gemini", "Jun 21 to Jun 30": "Cancer"},
+        "July": {"Jul 1 to Jul 22": "Cancer", "Jul 23 to Jul 31": "Leo"},
+        "August": {"Aug 1 to Aug 22": "Leo", "Aug 23 to Aug 31": "Virgo"},
+        "September": {"Sep 1 to Sep 22": "Virgo", "Sep 23 to Sep 30": "Libra"},
+        "October": {"Oct 1 to Oct 22": "Libra", "Oct 23 to Oct 31": "Scorpio"},
+        "November": {"Nov 1 to Nov 21": "Scorpio", "Nov 22 to Nov 30": "Sagittarius"},
+        "December": {"Dec 1 to Dec 21": "Sagittarius", "Dec 22 to Dec 31": "Capricorn"}
+    }
+
+    ui_buttons = dict()
+
+    for index, month in enumerate(month_split):
+        # Vertically space out the month buttons
+        y_offset = 55 + (index * 27)
+        month_label = Label(month, 200, y_offset, size=16, fill=rgb(60, 60, 60))
+        month_label.left = 20
+
+        # This dictionary stores date-to-sign Label mappings for each month
+        date_range = dict()
+
+        # Find the matching month to assign the right positions
+        if month_label.value == month:
+            i = 0
+            for date, sign in month_split[month].items():
+                date_label = Label(date, 140, month_label.centerY + (27 * i), size=16, align='left', visible=False)
+                sign_label = Label(sign, 350, 200, size=16, visible=False, bold=True, fill=rgb(8, 28, 112))
+                date_range[date_label] = sign_label
+                i += 1
+
+        ui_buttons[month_label] = date_range
+
+    return ui_buttons
+
+def ui_control():
+    """
+    Initializes the app-level variables to track user interactions and selections.
+    """
+    app.month_selected = None
+    app.month_date_range = []  # Will hold (date_label, sign_label) tuples for selected month
+    app.date_selected = None
+    app.sign_selected = None
+
+def onMousePress(mouseX, mouseY):
+    """
+    Responds to user mouse clicks and delegates to month and date selection logic.
+    """
+    month_selector(mouseX, mouseY)
+    date_selector(mouseX, mouseY)
+
+def month_selector(x, y):
+    """
+    If a month label is clicked, it becomes the active month and its date ranges are shown.
+    """
+    for option in app.ui_buttons:
+        if option.hits(x, y) and app.month_selected != option:
+            app.month_selected = option
+
+            # Clear previous selection and load new date/sign pairs
+            app.month_date_range = list(app.ui_buttons[option].items())
+            month_display_control()
+
+def date_selector(x, y):
+    """
+    If a date range is clicked, it becomes the active selection and reveals the zodiac sign.
+    """
+    for date_label, sign_label in app.month_date_range:
+        if date_label.hits(x, y):
+            app.date_selected = date_label
+            app.sign_selected = sign_label
+            date_display_control()
+
+def month_display_control():
+    """
+    Updates UI to highlight the selected month and show its date ranges.
+    All other months and their contents are dimmed or hidden.
+    """
+    app.month_selected.fill = 'green'
+    app.month_selected.bold = True
+
+    for date_label, _ in app.ui_buttons[app.month_selected].items():
+        date_label.visible = True
+        date_label.fill = 'black'
+
+    # Reset the styling and visibility of other month/date/sign groups
+    for option in app.ui_buttons:
+        for date_label, sign_label in app.ui_buttons[option].items():
+            if option != app.month_selected:
+                option.fill = rgb(190, 190, 190)
+                option.bold = False
+                date_label.visible = False
+                date_label.bold = False
+                sign_label.visible = False
+
+def date_display_control():
+    """
+    Highlights the selected date and shows the corresponding zodiac sign.
+    Dims the other date options and hides unrelated signs.
+    """
+    if app.date_selected and app.sign_selected:
+        app.date_selected.fill = rgb(94, 8, 99)
+        app.date_selected.bold = True
+        app.sign_selected.visible = True
+
+        for option in app.ui_buttons:
+            for date_label, sign_label in app.ui_buttons[option].items():
+                if date_label != app.date_selected:
+                    date_label.fill = rgb(190, 190, 190)
+                    date_label.bold = False
+                if sign_label != app.sign_selected:
+                    sign_label.visible = False
+
+def main():
+    """
+    Entry point. Prepares the canvas and sets up all UI and logic.
+    """
+    app.background = 'navy'
+    make_background_title()
+    app.ui_buttons = make_ui()
+    ui_control()
+
+main()
+</code></pre>
+  </div>
+  </div>
+
+  <script>
+    const explanations = {
+      make_background_title: "Draws the title and three visual panels (left, center, right) used to separate months, dates, and zodiac output.",
+      make_ui: "Constructs all labels for months, dates, and zodiac signs. Uses a nested dictionary to organize them.",
+      ui_control: "Initializes state-tracking variables that hold the user's selected month, date, and sign.",
+      onMousePress: "Main mouse click handler. It calls month_selector and date_selector based on where the click happened.",
+      month_selector: "Checks if a month was clicked. If so, it highlights the month and shows its associated date ranges.",
+      date_selector: "Checks if a date range was clicked. If so, it highlights the date and prepares to display the sign.",
+      month_display_control: "Visually highlights the selected month and its date range options, hiding all others.",
+      date_display_control: "Shows the selected sign and dims other date/sign options.",
+      main: "The main setup routine to prepare the background, labels, and initial state of the program."
+    };
+
+    function showExplanation(key) {
+      const panel = document.getElementById("explanation");
+      panel.textContent = explanations[key] || "No explanation available for this line.";
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tic-Tac-Toe – Full Code with Explanations</title>
+  <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&ampdisplay=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  
+  <div id="banner" style="background: #333; padding: 10px;">
+  <h1 style="color: #f0f0f0;">Tic-Tac-Toe</h1>
+  <p style="font-size:12pt; font-weight:400;  color: #f0f0f0;">A clever game to demonstrate the usefulness of custom property and strategic use of different collection types.</p>
+  <p style="text-align: right;font-size:9pt; font-weight:200;  color: #f0f0f0; font-style:italic;">Original source code is owned by Kevin P.</p>
+  </div>
+<iframe style="width:60%; height:460px;display:block; margin:auto; border-style:solid; margin-top:1em; box-shadow:0 0 6px #ddd; border-radius:10px; padding: 5px; border-color:#bbb"
+   src="https://academy.cs.cmu.edu/sharing/navyKangaroo4163/embed"> 
+ </iframe>
+ <div id="content">
+     <div class="column" style="width:40%">
+       <h1>Data Structures</h1>
+  <strong>Data Structure Overview:</strong><br>
+      This Tic-Tac-Toe program uses a 3x3 list of Rect objects to represent the board.
+      Each Rect is labeled with metadata including its row, column, and diagonal membership.<br>
+      <ul>
+        <li><code>app.game_space</code> is a flat list of 9 Rects (3x3 grid) with each cell tracking its groupings (e.g. row1, columnB).</li>
+        <li><code>space.member</code> is a list attached to each space containing tags like <code>row1</code>, <code>columnA</code>, or <code>left_to_right_diag</code>.</li>
+        <li>Player marks ('x' or 'o') are drawn as Labels over Rects and attached via metadata.</li>
+      </ul>
+      This setup simplifies win detection since you can check tagged groups rather than scanning the grid manually.
+    <h1>Functions</h1>
+    <ul class="function-list">
+      <li onclick="showExplanation('initialize_board')">initialize_board()</li>
+      <li onclick="showExplanation('initialize_user_interface')">initialize_user_interface()</li>
+      <li onclick="showExplanation('onMousePress')">onMousePress()</li>
+      <li onclick="showExplanation('player_turn_changer')">player_turn_changer()</li>
+      <li onclick="showExplanation('space_labeler')">space_labeler()</li>
+      <li onclick="showExplanation('error_message')">error_message()</li>
+      <li onclick="showExplanation('check_for_winner')">check_for_winner()</li>
+      <li onclick="showExplanation('winning_decoration')">winning_decoration()</li>
+      <li onclick="showExplanation('main')">main()</li>
+    </ul>
+    <h2>Explanation</h2>
+    <div class="explanation-panel" id="explanation">
+    Click a function name to view its explanation.
+      
+    </div>
+  </div>
+
+  <div class="column" style="width:100%">
+    <h1>Full Code</h1>
+    <table style="width: 100%; border-collapse: collapse;  border: 2px solid #eb483f; margin-top: 1em; margin-bottom: 1em;">
+  <tr>
+    <td style="width: 5px;  text-align: center; font-size: 1.5em; background-color: #eb483f;"></td>
+    <td style="padding: 1em; color: #222; background-color:#faeeed">
+      <strong><span style="color:#eb483f; font-size:15pt">❌ Danger: DO NOT ATTEMPT</span></strong><br> Copying someone else's code and use it as your own is a serious offense per College Board AP rule which may result in test cancellation and permanent ban from all College Board tests. <br><br> You may reference algorithm and logic used in the code but you cannot copy any part of the code to use.
+    </td>
+  </tr>
+</table>
+  <pre style="font-size:10pt"><code class="language-python">
+import random
+
+def initialize_board():
+    """
+    Initializes a 3x3 grid of Rect objects as the tic-tac-toe board.
+    Each square is tagged with its row, column, and diagonal memberships.
+    This metadata helps simplify win checking.
+
+    Note:
+    - We use a list (app.game_space) to store all 9 squares in a specific order so we can iterate through them.
+    - Each square's 'member' is also a list because a square may belong to multiple groups (row, column, diagonals).
+    """
+    app.game_space = []
+    for i in range(3):  # Loop through each row
+        for j in range(3):  # Loop through each column
+            # Compute x and y positions for each square
+            space = Rect(40 + j * 120, 40 + i * 120, 80, 80)
+            space.member = []  # Holds labels for row, column, and diagonals
+
+            # Assign column label based on j index
+            if j == 0:
+                j_label = "A"
+                space.member.append("columnA")
+            elif j == 1:
+                j_label = "B"
+                space.member.append("columnB")
+            else:
+                j_label = "C"
+                space.member.append("columnC")
+
+            # Assign row label based on i index (starting from 1)
+            i_label = str(i + 1)
+            if i_label == "1":
+                space.member.append("row1")
+            elif i_label == "2":
+                space.member.append("row2")
+            elif i_label == "3":
+                space.member.append("row3")
+
+            # Create unique ID for each square like "1A", "2B"
+            identifier = i_label + j_label
+
+            # Tag diagonal memberships
+            if identifier in ("1A", "2B", "3C"):
+                space.member.append("left_to_right_diag")
+            if identifier in ("1C", "2B", "3A"):
+                space.member.append("right_to_left_diag")
+
+            # Initialize square's state
+            space.id = identifier
+            space.player = None  # Will hold 'x' or 'o'
+            space.label = Label("", space.centerX, space.centerY,
+                                size=50, fill='gold', bold=True)
+            app.game_space.append(space)
+
+def initialize_user_interface():
+    """
+    Sets up game UI including turn banners and reset button.
+    Randomly selects who starts the game.
+    """
+    player_choices = ("x", "o")
+    app.current_player = random.choice(player_choices)
+    app.game_stop = False
+    app.change_player = False
+
+    # Game title at the top
+    app.game_title_banner = Label("Tic-Tac-Toe", 200, 20, size=25, font='orbitron')
+
+    # Reset button setup
+    app.reset_button = Rect(340, 380, 60, 20, fill='lightblue', borderWidth=2, border='black')
+    app.reset_text = Label("Reset", app.reset_button.centerX, app.reset_button.centerY, size=15)
+    app.reset = Group(app.reset_button, app.reset_text)
+
+    sleep(1)  # Small delay before showing turn banner
+    app.player_turn_banner = Label("It's " + app.current_player + "'s turn!", 200, 380,
+                                   size=25, font='orbitron')
+
+def onMousePress(mouseX, mouseY):
+    """
+    Handles mouse clicks.
+    If reset is clicked, restarts game.
+    If valid square is clicked, updates board and switches turn.
+    """
+    if app.reset.hits(mouseX, mouseY):
+        app.group.clear()
+        main()
+    elif app.game_stop:
+        pass
+    else:
+        space_labeler(mouseX, mouseY)
+        if not app.game_stop:
+            player_turn_changer()
+
+def player_turn_changer():
+    """
+    Switches current player to the other symbol ('x' <-> 'o').
+    Only switches if a valid move was made.
+    """
+    if not app.change_player:
+        return
+    elif app.current_player == "x":
+        app.current_player = "o"
+    else:
+        app.current_player = "x"
+    app.player_turn_banner.value = "It's " + app.current_player + "'s turn!"
+    app.player_turn_banner.fill = 'black'
+
+def space_labeler(x, y):
+    """
+    Checks if a click is on an empty square.
+    If yes, label it with the player's symbol and check for a winner.
+    If not, show an error message.
+    """
+    for space in app.game_space:
+        if space.hits(x, y) and space.player is None:
+            space.player = app.current_player
+            space.label.value = app.current_player
+            app.change_player = True
+            check_for_winner(space, app.current_player)
+            print("success")
+            return
+
+    print("error")
+    error_message()
+    app.change_player = False
+
+def error_message():
+    """
+    Displays a red warning if the player clicks an invalid space.
+    After a brief pause, resets banner to current player's turn.
+    """
+    app.player_turn_banner.value = "Can't click there!"
+    app.player_turn_banner.fill = 'red'
+    sleep(1)
+    app.player_turn_banner.value = "It's " + app.current_player + "'s turn!"
+    app.player_turn_banner.fill = 'black'
+
+def check_for_winner(space, player_to_check):
+    """
+    After a move is made, checks if the player has filled a complete
+    row, column, or diagonal by counting membership tags.
+    If so, triggers winning visuals. If no empty spaces remain, ends in a tie.
+
+    Note:
+    - We use a dictionary (counter) here to keep track of how many squares the player has in each group.
+    - Dictionary is used because we want fast lookup and update for specific membership categories.
+    """
+    member_list = space.member
+    counter = dict()
+
+    for members in member_list:
+        counter[members] = 0
+
+    for membership in member_list:
+        for square in app.game_space:
+            if membership in square.member and square.player == player_to_check:
+                counter[membership] += 1
+                if counter[membership] == 3:
+                    winning_decoration(membership, player_to_check)
+                    app.game_stop = True
+                    return
+
+    # If board is full and no winner, declare tie
+    for square in app.game_space:
+        if square.player is None:
+            return
+    app.player_turn_banner.value = "Game Tied!"
+    app.player_turn_banner.fill = 'red'
+    app.game_stop = True
+
+def winning_decoration(membership, winner):
+    """
+    Highlights the 3 winning squares and draws a red line through them.
+    Also updates the banner to show the winner.
+    """
+    winning_group = []
+
+    for square in app.game_space:
+        if membership in square.member:
+            square.fill = 'green'  # Highlight winning squares
+            winning_group.append([square.centerX, square.centerY])
+
+    winning_group.sort()  # Sort squares to draw line from start to end
+    origin_x = winning_group[0][0]
+    origin_y = winning_group[0][1]
+    end_x = winning_group[2][0]
+    end_y = winning_group[2][1]
+
+    connecting_line = Line(origin_x, origin_y, end_x, end_y, fill='red', lineWidth=10, opacity=80)
+    app.player_turn_banner.value = winner + " wins!"
+    app.player_turn_banner.fill = 'green'
+
+def main():
+    """
+    Starts the game by initializing the board and user interface.
+    This is called once at the start and again when reset is pressed.
+    """
+    initialize_board()
+    initialize_user_interface()
+
+main()
+  </code></pre>
+  </div>
+  </div>
+
+  <script>
+    const explanations = {
+      initialize_board: "Sets up a 3x3 grid of Rects and attaches metadata to each for tracking row, column, and diagonals. Each space stores its ID and player mark.",
+      initialize_user_interface: "Displays game banners and controls like the reset button. Randomly selects the starting player.",
+      onMousePress: "Handles player input. Resets the game or registers a move if a valid space is clicked.",
+      player_turn_changer: "Switches the current player from 'x' to 'o' or vice versa after a successful move.",
+      space_labeler: "Detects which square was clicked and assigns the current player's mark. Triggers win check.",
+      error_message: "Displays a warning when a player clicks an invalid or occupied square.",
+      check_for_winner: "Checks if the current player has won by filling all squares in a row, column, or diagonal.",
+      winning_decoration: "Highlights the winning squares and draws a red line across them.",
+      main: "Bootstraps the game by calling board and UI initialization."
+    };
+
+    function showExplanation(key) {
+      const panel = document.getElementById("explanation");
+      panel.textContent = explanations[key] || "No explanation available for this line.";
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script>
+</body>
+</html>

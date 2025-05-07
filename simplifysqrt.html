@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Simplify Square Root</title>
+  <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <style>
+    #content {
+      display: flex;
+      flex-direction: row;
+      gap: 2em;
+      margin: 0;
+      padding: 2em;
+      background-color: #f7f9fc;
+      font-family: 'noto sans', sans-serif;
+    }
+    .column {
+
+    }
+    h1 {
+      color: #1a73e8;
+    }
+    .function-list {
+      list-style: none;
+      padding: 0;
+    }
+    .function-list li {
+      margin: 0.5em 0;
+      cursor: pointer;
+      color: #1a73e8;
+    }
+    .function-list li:hover {
+      text-decoration: underline;
+    }
+    .explanation-panel {
+      background-color: #ffffff;
+      border-radius: 8px;
+      padding: 1em;
+      box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+      min-height: 200px;
+    }
+    pre, pre code {
+      background-color: #f5f2f0;
+      padding: 1em;
+      border-radius: 8px;
+      white-space: pre-wrap !important;
+      word-break: break-word;
+      overflow-x: hidden;
+      max-width: 100%;
+    }
+  </style>
+</head>
+<body>
+   <div style="font-family:noto sans; background: #333; padding: 10px;">
+    <h1 style="font-family: noto sans; color: #f0f0f0;">Simplify Square Root</h1>
+    <p style="font-size:12pt; font-family:noto sans; font-weight:400;  color: #f0f0f0;">
+      A program that can simplify square root with prime factors smaller than 997 using pre-determined list and dictionary to efficiently process large numbers.
+    </p>
+    <p style="text-align: right;font-size:9pt; font-family:noto sans; font-weight:200;  color: #f0f0f0; font-style:italic;">
+      Original source code is owned by Derek T.
+    </p>
+  </div>
+<iframe src="https://trinket.io/embed/python3/835c1b040a50?outputOnly=true&runOption=run&start=result" width="100%" height="300" frameborder="0" marginwidth="0" marginheight="0" allowfullscreen></iframe>
+<div id="content">
+  <!-- LEFT COLUMN -->
+  <div class="column" style="width:40%">
+    <h1>Data Structures</h1>
+    <strong>Data Structure Overview:</strong><br>
+    This program relies on:
+    <ul>
+      <li>A <code>list</code> of known prime numbers up to 997.</li>
+      <li>A <code>dictionary</code> of exponents mapping each prime to how many times it divides the target number.</li>
+    </ul>
+    <strong>Why this structure makes sense:</strong><br>
+    <ul>
+      <li>The list is used for the ordered set of prime bases.</li>
+      <li>The dictionary allows quick access and updates for prime exponents.</li>
+      <li>Specialized divisibility functions handle small primes (2, 3, 5, 11) quickly.</li>
+      <li>The generic <code>prime_division_test</code> ensures other primes are handled systematically.</li>
+    </ul>
+
+    <h1>Functions</h1>
+    <ul class="function-list">
+      <li onclick="showExplanation('prime_number_generator')">prime_number_generator()</li>
+      <li onclick="showExplanation('divisible_by_two')">divisible_by_two()</li>
+      <li onclick="showExplanation('divisible_by_three')">divisible_by_three()</li>
+      <li onclick="showExplanation('divisible_by_five')">divisible_by_five()</li>
+      <li onclick="showExplanation('divisible_by_eleven')">divisible_by_eleven()</li>
+      <li onclick="showExplanation('prime_division_test')">prime_division_test()</li>
+      <li onclick="showExplanation('factorization_controller')">factorization_controller()</li>
+      <li onclick="showExplanation('square_factor_extraction')">square_factor_extraction()</li>
+      <li onclick="showExplanation('remove_unused_prime')">remove_unused_prime()</li>
+      <li onclick="showExplanation('edge_case_test')">edge_case_test()</li>
+      <li onclick="showExplanation('main')">main()</li>
+    </ul>
+
+   
+  </div>
+
+  <!-- RIGHT COLUMN -->
+  <div class="column" style="width:100%">
+    <h1>Full Code</h1>
+    <table style="width: 100%; border-collapse: collapse;  border: 2px solid #eb483f; margin-top: 1em; margin-bottom: 1em;">
+      <tr>
+        <td style="width: 5px;  text-align: center; font-size: 1.5em; background-color: #eb483f;"></td>
+        <td style="padding: 1em; color: #222; background-color:#faeeed">
+          <strong><span style="color:#eb483f; font-size:15pt">❌ Danger: DO NOT ATTEMPT</span></strong><br>
+          Copying someone else's code and submitting it as your own is a serious offense per College Board AP rules and may result in consequences.<br><br>
+          You are encouraged to study and reference the logic, but always write your own code in your own words.
+        </td>
+      </tr>
+    </table>
+
+    <!-- CODE BLOCK -->
+    <pre style="font-size:10pt"><code class="language-python">
+def prime_number_generator():
+    """
+    Generate a dictionary of prime numbers (up to 997) with initial exponents set to 0.
+    
+    Data Structures:
+      - A list 'prime_numbers_to_1000' holds the primes.
+      - A dictionary 'prime_factors' maps each prime to its exponent (starting at 0).
+      
+    Returns:
+      A dictionary in which each prime key from the list is initialized to 0.
+    """
+    prime_numbers_to_1000 = [
+        2,   3,   5,   7,  11,  13,  17,  19,  23,  29,
+        31,  37,  41,  43,  47,  53,  59,  61,  67,  71,
+        73,  79,  83,  89,  97, 101, 103, 107, 109, 113,
+       127, 131, 137, 139, 149, 151, 157, 163, 167, 173,
+       179, 181, 191, 193, 197, 199, 211, 223, 227, 229,
+       233, 239, 241, 251, 257, 263, 269, 271, 277, 281,
+       283, 293, 307, 311, 313, 317, 331, 337, 347, 349,
+       353, 359, 367, 373, 379, 383, 389, 397, 401, 409,
+       419, 421, 431, 433, 439, 443, 449, 457, 461, 463,
+       467, 479, 487, 491, 499, 503, 509, 521, 523, 541,
+       547, 557, 563, 569, 571, 577, 587, 593, 599, 601,
+       607, 613, 617, 619, 631, 641, 643, 647, 653, 659,
+       661, 673, 677, 683, 691, 701, 709, 719, 727, 733,
+       739, 743, 751, 757, 761, 769, 773, 787, 797, 809,
+       811, 821, 823, 827, 829, 839, 853, 857, 859, 863,
+       877, 881, 883, 887, 907, 911, 919, 929, 937, 941,
+       947, 953, 967, 971, 977, 983, 991, 997
+    ]
+    prime_factors = dict()
+
+    # Initialize each prime's count to 0.
+    for prime in prime_numbers_to_1000:
+        prime_factors[prime] = 0
+    return prime_factors
+
+def divisible_by_two(num, prime_factors):
+    """
+    Check divisibility by 2 and extract all factors of 2 from num.
+    
+    Logic:
+      - Checks if the last character (digit) in the string form of num is even.
+      - Uses a while loop to count how many times a power of 2 divides num.
+    
+    Returns:
+      A tuple (num, prime_factors) with the reduced number and updated count for 2.
+    """
+    if str(num)[-1] in ("2", "4", "6", "8", "0") and num > 1:
+        # Assume at least one 2 factor is present.
+        prime_factors[2] = 1
+        i = 2
+        # Repeatedly check if a higher power of 2 divides num.
+        while num % (2**i) == 0:
+            prime_factors[2] += 1
+            i += 1        
+        # Remove all factors of 2 from num.
+        num = num // (2 ** prime_factors[2])
+        return (num, prime_factors)
+    else:
+        return (num, prime_factors)
+    
+def divisible_by_five(num, prime_factors):
+    """
+    Check divisibility by 5 and extract all factors of 5 from num.
+    
+    Logic:
+      - Uses the last-digit rule; a number ending in 5 or 0 is divisible by 5.
+      - Repeatedly divides num by increasing powers of 5.
+    
+    Returns:
+      A tuple (num, prime_factors) with num reduced and the count for 5 updated.
+    """
+    if str(num)[-1] in ("5", "0") and num > 1:
+        prime_factors[5] = 1
+        i = 2
+        while num % (5**i) == 0:
+            prime_factors[5] += 1
+            i += 1
+        num = num // (5 ** prime_factors[5])
+        return (num, prime_factors)
+    else:
+        return (num, prime_factors)
+
+def divisible_by_three(num, prime_factors):
+    """
+    Check divisibility by 3 using the digit-sum test and extract factors of 3.
+    
+    Logic:
+      - Sums all digits of num.
+      - If the sum is divisible by 3, repeatedly divides num by increasing powers of 3.
+    
+    Returns:
+      A tuple (num, prime_factors) with the reduced num and the count for 3.
+    """
+    divisible_by_three_test = 0
+    for digit in str(num):
+        divisible_by_three_test += int(digit)
+    if divisible_by_three_test % 3 == 0:
+        prime_factors[3] = 1
+        i = 2
+        while num % (3**i) == 0:
+            prime_factors[3] += 1
+            i += 1
+        num = num // (3 ** prime_factors[3])
+        return (num, prime_factors)
+    else:
+        return (num, prime_factors)
+
+def divisible_by_eleven(num, prime_factors):
+    """
+    Check divisibility by 11 using the alternating digit sum rule and extract factors of 11.
+    
+    Logic:
+      - Creates an alternating sum of digits from num.
+      - If the alternating sum is divisible by 11, repeatedly divides num by powers of 11.
+    
+    Returns:
+      A tuple (num, prime_factors) with num reduced and updated count for 11.
+    """
+    divisible_by_eleven_test = 0
+    digit_list = list(str(num))
+    count = 0
+    # Calculate alternating sum: add then subtract digits.
+    for digit in digit_list:
+        if count == 0:
+            divisible_by_eleven_test = int(digit)
+        elif count % 2 != 0:
+            divisible_by_eleven_test -= int(digit)
+        elif count % 2 == 0:
+            divisible_by_eleven_test += int(digit)
+        count += 1
+        
+    if divisible_by_eleven_test % 11 == 0:
+        prime_factors[11] = 1
+        i = 2
+        while num % (11**i) == 0:
+            prime_factors[11] += 1
+            i += 1
+        num = num // (11 ** prime_factors[11])
+        return (num, prime_factors)
+    else:
+        return (num, prime_factors)
+    
+def prime_division_test(num, prime_to_test, prime_factors):
+    """
+    For a given prime, repeatedly divide num by that prime and update its count.
+    
+    This function works as a generic test for any prime factor.
+    
+    Returns:
+      A tuple (num, prime_factors) with num reduced and prime_to_test's exponent updated.
+    """
+    if num % prime_to_test == 0:
+        while num % prime_to_test == 0:
+            prime_factors[prime_to_test] += 1
+            num = num // prime_to_test
+    return (num, prime_factors)
+
+def factorization_controller(num, prime_factors):
+    """
+    Factorizes num by applying specialized divisibility functions (for 2, 3, 5, 11)
+    and then a generic prime division test.
+    
+    Logic:
+      - Uses specific tests to quickly remove factors.
+      - Iterates over the prime_factors dictionary to extract any remaining factors.
+    
+    Returns:
+      A tuple (num, prime_factors). Ideally, num becomes 1 if fully factorized,
+      and prime_factors contains the exponents for each prime factor.
+    """
+    num, prime_factors = divisible_by_two(num, prime_factors)
+    num, prime_factors = divisible_by_three(num, prime_factors)
+    num, prime_factors = divisible_by_five(num, prime_factors)
+    num, prime_factors = divisible_by_eleven(num, prime_factors)
+    
+    # Iterate through the dictionary to test remaining primes.
+    for prime in prime_factors:
+        # If the prime hasn't been used (exponent==0) but might still divide num, or if num equals the prime.
+        if (prime_factors[prime] == 0 and prime <= num) or prime == num:
+            num, prime_factors = prime_division_test(num, prime, prime_factors)
+        elif prime > num:
+            break
+    return (num, prime_factors)
+                
+# Replace the square_factor_extraction() function with the following version:
+
+def square_factor_extraction(remainder, prime_factors):
+    """
+    Extract the perfect square factors from the full factorization.
+
+    Parameters:
+      remainder: The remaining factor of the original number after division by all
+                 primes in the dictionary (this could be >1 if it wasn't factorable by primes ≤997).
+      prime_factors: A dictionary that contains the exponents for each prime factor found.
+
+    Logic:
+      - For each prime factor in the dictionary, compute the number of complete pairs (squares)
+        and the leftover exponent.
+      - The "outside value" is the product of primes raised to the number of pairs.
+      - The "leftover product" is the product of primes raised to the leftover exponent.
+      - The final radicand (inside_value) is the product of the leftover product and the remainder.
+    
+    Returns:
+      A tuple (outside_value, inside_value) so that:
+         sqrt(original) simplifies to "outside_value sqrt(inside_value)".
+    """
+    prime_square_remain = []
+    for prime in prime_factors:
+        if prime_factors[prime] == 0:
+            continue
+        else:
+            # Calculate how many complete pairs exist (each pair forms a perfect square)
+            squares = prime_factors[prime] // 2
+            # The leftover exponent for that prime (that remains inside the square root)
+            leftover = prime_factors[prime] - (squares * 2)
+            prime_square_remain.append((prime, squares, leftover))
+    
+    outside_value = 1   # Product that comes out of the square root
+    leftover_product = 1  # Product from the leftover primes (still under the square root)
+    for prime, squares, leftover in prime_square_remain:
+        if squares > 0:
+            outside_value *= prime ** squares
+        if leftover > 0:
+            leftover_product *= prime ** leftover
+
+    # Multiply in the remaining unfactored part
+    inside_value = leftover_product * remainder
+    return (outside_value, inside_value)
+
+def remove_unused_prime(prime_factors):
+    """
+    Removes primes with exponent 0 from the prime_factors dictionary.
+    
+    Returns:
+      The revised dictionary containing only primes with non-zero exponents, or
+      False if the dictionary is empty.
+    """
+    revised_prime = dict()
+    for prime in prime_factors:
+        if prime_factors[prime] != 0:
+            revised_prime[prime] = prime_factors[prime]
+    
+    if len(revised_prime) == 0:
+        return False
+    else:
+        return revised_prime
+
+def edge_case_test(num):
+    """
+    Check for special cases: 0, 1, and -1.
+    
+    Returns:
+      False if num is one of these edge cases (after printing the result),
+      True otherwise.
+    """
+    if num == 1:
+        print("The square root of 1 is 1")
+        return False
+    elif num == -1:
+        print("The square root of -1 is i")
+        return False
+    elif num == 0:
+        print("The square root of 0 is 0")
+        return False
+    else:
+        return True
+
+def main():
+    """
+    Simplify the square root of a given number.
+    
+    Input Handling and Edge Cases:
+      - Checks if original exceeds 997^2 (warning about incomplete factorization).
+      - Special cases (0, 1, and -1) are handled separately.
+    
+    Process:
+      1. The number 'original' is set (or could be input by the user).
+      2. If the number is negative, it is converted to positive for factorization.
+      3. The number is factorized with the help of various divisibility functions.
+      4. Unused prime keys are removed from the dictionary.
+      5. Perfect square factors are extracted to simplify the square root.
+      6. The simplified result is printed.
+      
+    Returns:
+      None; prints the simplified square root expression.
+      """
+      
+    # prompt user for input and check input for validity
+    valid = False
+    while valid is False:
+      original= input("Enter the radicand of your expression. The radicand is the value under the radical sign: ")
+      try:
+        original=int(original)
+      except ValueError:
+        print ("Invalid entry. Try again.")
+      else:
+        valid = True
+    
+    
+    # Warn if original is larger than the square of the largest pre-determined prime.
+    if original > 997**2:
+        print("This number exceeds the maximum pre-determined prime factors so the result may not be accurate.")
+    print("Now trying to simplify sqrt(" + str(original) + ")")
+    num = original
+    proceed_to_check = edge_case_test(num)
+    if proceed_to_check:
+        if num < 0:
+            num *= -1
+        prime_factors = prime_number_generator()
+        
+        num, prime_factors = factorization_controller(num, prime_factors)
+        prime_factors = remove_unused_prime(prime_factors)
+        if prime_factors == False:
+            if 997**2 >= original:
+                print(original, "is a prime number.")
+            else:
+                print(original, "has no factors smaller than 997. It can either be a prime number or have factors larger than 997.")
+        else:
+            coefficient, radicand = square_factor_extraction(num, prime_factors)
+            if radicand == 1:
+                # If the inside becomes 1, it's a perfect square.
+                print("The simplified square root of", original, "is", str(coefficient))
+            elif coefficient == 1:
+                print("The simplified square root of", original, "is sqrt(" + str(radicand) + ")")
+            elif original >= 0:
+                print("The simplified square root of", original, "is", str(coefficient) + " sqrt(" + str(radicand) + ")")
+            elif original < 0:
+                print("The simplified square root of", original, "is", str(coefficient) + " sqrt(" + str(radicand) + ")i")
+            elif original < 0:
+                print("The simplified square root of", original, "is", str(coefficient) + " sqrt(" + str(radicand) + ")i")
+    
+main()
+    </code></pre>
+  </div>
+</div>
+
+<script>
+  const explanations = {
+    'prime_number_generator': 'Generates a dictionary mapping prime numbers up to 997 to an exponent of 0. Serves as the initial structure for factorization.',
+    'divisible_by_two': 'Checks if \\'num\\' has the prime factor 2. Uses the last digit rule and powers of 2 to count how many times it divides \\'num\\'. Returns the reduced number and updated factors.',
+    'divisible_by_three': 'Tests divisibility by 3 using the digit-sum rule, then repeatedly divides out powers of 3. Updates prime_factors accordingly.',
+    'divisible_by_five': 'Checks the last digit for 0 or 5 to see if \\'num\\' is divisible by 5, then divides out powers of 5.',
+    'divisible_by_eleven': 'Implements the alternating sum rule to test divisibility by 11, then divides out powers of 11.',
+    'prime_division_test': 'A generic function to repeatedly divide out any given prime, updating the exponent count in prime_factors.',
+    'factorization_controller': 'Coordinates specialized divisibility checks (2, 3, 5, 11) and then uses a generic prime division test for any remaining factors.',
+    'square_factor_extraction': 'Looks at the exponents in prime_factors and extracts perfect square factors. Computes the \\'outside\\' portion (coefficient) and the \\'inside\\' portion (radicand) of the simplified square root.',
+    'remove_unused_prime': 'Removes primes with zero exponents from prime_factors. Helps keep the result dictionary clean and minimal.',
+    'edge_case_test': 'Checks if \\'num\\' is 0, 1, or -1. If so, it prints the square root directly (0, 1, or i) and signals no further factoring is needed.',
+    'main': 'Handles input (e.g., \\'original\\'), calls edge_case_test, prime_number_generator, factorization_controller, remove_unused_prime, and square_factor_extraction to produce a fully simplified square root of \\'original\\'.',
+  };
+
+  function showExplanation(key) {
+    const panel = document.getElementById("explanation");
+    panel.textContent = explanations[key] || "No explanation available for this function.";
+  }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script>
+</body>
+</html>
